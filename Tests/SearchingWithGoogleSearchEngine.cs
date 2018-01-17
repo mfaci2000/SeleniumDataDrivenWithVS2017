@@ -28,6 +28,7 @@ namespace Pages
         {
             // 1. Get the browser name from the data source
             browserName = TestContext.DataRow["BrowserName"].ToString();
+            Console.WriteLine($"Browser name: {browserName}");
 
             // 2. Close all browser instances (for this type) before starting the test
             BrowserFactory.CloseAllInstancesForBrowser(browserName);
