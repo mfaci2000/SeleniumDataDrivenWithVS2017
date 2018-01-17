@@ -1,57 +1,48 @@
 ﻿using System;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.PageObjects;
+using BrowserLibrary;
 
 namespace Pages
 {
     public class GoogleHomePage
     {
 
-        private IWebDriver driver;
+        private IWebDriver _driver;
+        private string _googleHomepage = "https://www.google.com";
+
+        [FindsBy(How = How.Id, Using = "lst-ib")]
+        public IWebElement searchTextbox;
+
+        [FindsBy(How = How.Name, Using = "btnK")]
+        public IWebElement googleSearchButton;
 
         public GoogleHomePage(string browserName)
         {
-            
-            //BrowserFactory.CloseAllInstancesForBrowser(browserName);
-
-            // 3. Initialize a driver instance for the selected browser
-            IWebDriver driver = BrowserLibrary.BrowserFactory.OpenInstanceFor(browserName);
-
-
-            this.driver = driver;
-            PageFactory.InitElements(driver, this);
+            // Initialize (and save) a driver instance for the selected browser
+            this._driver = BrowserFactory.OpenBrowserInstanceFor(browserName);
+            //this._driver = BrowserFactory.Drivers[browserName.ToUpper()];
+            PageFactory.InitElements(this._driver, this);
         }
 
-        //public GoogleHomePage(IWebDriver driver)
-        //{
-        //    this.driver = driver;
-        //    PageFactory.InitElements(driver, this);
-        //}
-
-        //[FindsBy(How = How.CssSelector, Using = ".fusion-main-menu a[href*='about']")]
-        //private IWebElement about;
-
-        //[FindsBy(How = How.ClassName, Using = "fusion-main-menu-icon")]
-        //private IWebElement searchIcon;
-
-        //public void goToPage()
-        //{
-        //    driver.Navigate().GoToUrl("https://www.google.com");
-        //}
-
-        [FindsBy(How = How.Id, Using = "sb_form_q")]
-        private IWebElement searchTextBox;
-
-        public void NavigateToGoogleSearchPage()
+        public GoogleHomePage NavigateToGoogleSearchPage()
         {
-            driver.Navigate().GoToUrl("https://www.google.com");
+            _driver.Manage().Window.Maximize();
+            _driver.Navigate().GoToUrl(this._googleHomepage);
+            return this;
         }
 
-        //public AboutPage goToAboutPage()
-        //{
-        //    about.Click();
-        //    return new AboutPage(driver);
-        //}
+        public GoogleHomePage EnterTextInSearchBox(string text)
+        {
+            searchTextbox.SendKeys(text);
+            searchTextbox.SendKeys(Keys.Escape);
+            return this;
+        }
 
+        public ResultsPage ClickGoogleSearchButton()
+        {
+            googleSearchButton.Click();
+            return new ResultsPage(_driver);
+        }
     }
 }

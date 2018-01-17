@@ -30,14 +30,3 @@ namespace FrameworkBrowserLibrary
         }
     }
 }
-
-// MicrosoftWebDriver.exe ==> edge
-//public enum BrowserName
-//{
-//    CHROME,
-//    FIREFOX,
-//    IE,
-//    SAFARI,
-//    EDGE,
-//    iexplore
-//}
